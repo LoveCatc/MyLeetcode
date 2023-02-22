@@ -23,17 +23,33 @@ class Solution:
         right = 0
         shortest = len(s)
         shortstr = ""
+        sdict = {s[0]:1}
+
+        if len(s) < len(t):
+            return ""
+        if len(s) == len(t):
+            if cmpdict(tdict, str2dict(s)):
+                return s
+            else:
+                return ""
 
         while right < len(s):
-            # print(left, right)
-            sdict = str2dict(s[left:right+1])
+            # print(left, right, s[left:right+1])
             if not cmpdict(tdict, sdict):
                 right += 1
+                if right >= len(s):
+                    break
+                sdict[s[right]] = sdict.get(s[right], 0) + 1
             else:
-                if shortest > right-left+1:
-                    shortest = right-left+1
+                if len(s[left:right+1]) <= shortest:
+                    shortest = len(s[left:right+1])
                     shortstr = s[left:right+1]
+                if left == right:
+                    break
+                sdict[s[left]] = sdict[s[left]] - 1
                 left += 1
+                if not cmpdict(tdict, sdict) and right == len(s)-1:
+                    break
         return shortstr
         
 
